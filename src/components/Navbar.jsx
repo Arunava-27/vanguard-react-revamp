@@ -8,7 +8,8 @@ import {
   FaList, 
   FaBell, 
   FaAngleLeft, 
-  FaAngleRight 
+  FaAngleRight,
+  FaGlobe
 } from 'react-icons/fa';
 
 const Navbar = () => {
@@ -21,6 +22,11 @@ const Navbar = () => {
     { path: '/network', label: 'Network Map', icon: <FaNetworkWired /> },
     { path: '/logs', label: 'Log Monitor', icon: <FaList /> },
     { path: '/alerts', label: 'Alerts', icon: <FaBell />, badge: alerts.length },
+    { 
+      path: '/geo-map', 
+      label: 'Geo Map', 
+      icon: <FaGlobe /> 
+    }, // Assuming you have a globe icon imported
   ];
 
   return (

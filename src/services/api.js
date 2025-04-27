@@ -1,5 +1,6 @@
 // src/services/api.js
 import axios from 'axios';
+const geoCache = new Map();
 
 const API_URL = 'http://127.0.0.1:8888';
 
@@ -16,6 +17,19 @@ export const fetchLatestFlow = async () => {
 export const searchFlows = async (params) => {
   const response = await axios.get(`${API_URL}/flows/search`, { params });
   return response.data;
+};
+
+export const fetchGeoData = async (ip) => {
+  if (geoCache.has(ip)) return geoCache.get(ip);
+  
+  try {
+    const response = await axios.get(`${API_URL}/geoip/${ip}`);
+    geoCache.set(ip, response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`GeoIP fetch failed for ${ip}:`, error);
+    return null;
+  }
 };
 
 // WebSocket connection for real-time updates

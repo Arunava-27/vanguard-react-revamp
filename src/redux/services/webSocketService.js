@@ -3,6 +3,8 @@ import { addFlow, setLoading } from '../slices/flowsSlice';
 import { addAlerts } from '../slices/alertsSlice';
 import { toast } from 'react-toastify';
 
+const retryCount = 5; // Initialize retry count
+
 
 const detectAlert = (flow) => {
   const alerts = [];
@@ -84,13 +86,15 @@ export const initializeWebSocket = (dispatch) => {
     };
   }
 
-  function retryConnect() {
-    if (retryTimeout) clearTimeout(retryTimeout);
-    retryTimeout = setTimeout(() => {
-      console.log('Retrying WebSocket connection...');
-      connect();
-    }, 5000); // Retry after 5 seconds
-  }
+  // In webSocketService.js
+function retryConnect() {
+  if (retryTimeout) clearTimeout(retryTimeout);
+  const delay = Math.min(1000 * Math.pow(2, retryCount), 30000); // Max 30s
+  retryTimeout = setTimeout(() => {
+    console.log(`Retrying WebSocket (attempt ${retryCount})...`);
+    connect();
+  }, delay);
+}
 
   connect();
   return webSocket;
